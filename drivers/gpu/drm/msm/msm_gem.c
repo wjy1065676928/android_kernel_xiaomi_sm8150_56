@@ -1178,9 +1178,14 @@ static struct drm_gem_object *_msm_gem_new(struct drm_device *dev,
 		if (ret)
 			goto fail;
 	}
-	mutex_unlock(&msm_obj->lock);
+
 	return obj;
+
+fail:
+	drm_gem_object_unreference_unlocked(obj);
+	return ERR_PTR(ret);
 }
+
 
 struct drm_gem_object *msm_gem_new_locked(struct drm_device *dev,
 		uint32_t size, uint32_t flags)
